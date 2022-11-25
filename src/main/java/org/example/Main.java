@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Main {
@@ -19,8 +18,8 @@ public class Main {
         var roles = new ArrayList<Role>();
 
         try (Connection conn = DriverManager.getConnection(args[0], args[1], args[2]);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("select * from pg_roles");
+             var stmt = conn.prepareStatement("select * from pg_roles");
+             ResultSet rs = stmt.executeQuery();
         ) {
             while (rs.next()) {
                 roles.add(new Role(rs.getString("rolname"), rs.getBoolean("rolsuper")));
@@ -38,7 +37,7 @@ public class Main {
         server.createContext("/dbroles", exchange -> Thread.startVirtualThread(() -> {
             try (var out = exchange.getResponseBody()) {
                 var resp = mapper.writeValueAsBytes(roles);
-                exchange.getResponseHeaders().add("Content-Type", "text/plain");
+                exchange.getResponseHeaders().add("Content-Type", "application/json");
                 exchange.sendResponseHeaders(200, resp.length);
                 out.write(resp);
             } catch (IOException e) {
