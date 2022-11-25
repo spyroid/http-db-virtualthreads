@@ -3,7 +3,6 @@ plugins {
     kotlin("jvm") version "1.7.21"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.graalvm.buildtools.native") version "0.9.18"
-//    id("io.freefair.lombok") version "6.6-rc1"
 }
 
 group = "org.example"
@@ -20,16 +19,8 @@ repositories {
 }
 
 dependencies {
-
-//    implementation("io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE")
     implementation("org.postgresql:postgresql:42.5.1")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.0")
-
-//    compileOnly("org.projectlombok:lombok:1.18.24")
-//    annotationProcessor("org.projectlombok:lombok")
-
-//    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
-//    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
 }
 
 tasks {
