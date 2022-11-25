@@ -1,2 +1,1 @@
-rootProject.name = "simple-db"
-
+rootProject.name = "http-db-virtualthreads"
