@@ -1,8 +1,8 @@
 plugins {
     id("java")
-    kotlin("jvm") version "1.7.21"
+    kotlin("jvm") version "1.8.20-RC"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("org.graalvm.buildtools.native") version "0.9.18"
+    id("org.graalvm.buildtools.native") version "0.9.20"
 }
 
 group = "org.example"
@@ -19,8 +19,14 @@ repositories {
 }
 
 dependencies {
-    implementation("org.postgresql:postgresql:42.5.1")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.0")
+    implementation("org.postgresql:postgresql:42.5.4")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(19))
+    }
 }
 
 tasks {
@@ -75,3 +81,13 @@ graalvmNative {
         }
     }
 }
+
+tasks.register<JavaExec>("runOn19") {
+    javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(19))
+    })
+
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("org.example.Main")
+}
+
