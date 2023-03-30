@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -19,19 +20,23 @@ public class Main {
         var server = HttpServer.create();
         var listen = new InetSocketAddress("0.0.0.0", 8080);
         server.bind(listen, 0);
+        server.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
 
-        server.createContext("/", exchange -> Thread.startVirtualThread(() -> {
+        server.createContext("/", exchange -> {
             try (var out = exchange.getResponseBody()) {
-                var resp = ("Simplest HTTP with VirtualThreads\n\n" + Thread.currentThread()).getBytes();
+                var str = ("Simplest HTTP with VirtualThreads\n\n" + Thread.currentThread());
+                var mem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+                str += "\n\nMemory: " + formatSize(mem);
+                var asBytes = str.getBytes();
                 exchange.getResponseHeaders().add("Content-Type", "text/plain");
-                exchange.sendResponseHeaders(200, resp.length);
-                out.write(resp);
+                exchange.sendResponseHeaders(200, asBytes.length);
+                out.write(asBytes);
             } catch (Exception e) {
 
             }
-        }));
+        });
 
-        server.createContext("/dbroles", exchange -> Thread.startVirtualThread(() -> {
+        server.createContext("/dbroles", exchange -> {
             try (var out = exchange.getResponseBody()) {
                 var roles = List.<Role>of();
                 if (args.length > 2) {
@@ -44,7 +49,7 @@ public class Main {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }));
+        });
         server.start();
         System.out.println("Server started on " + listen);
     }
@@ -67,6 +72,12 @@ public class Main {
     }
 
     record Role(String name, boolean isSuperuser) {
+    }
+
+    public static String formatSize(long v) {
+        if (v < 1024) return v + " B";
+        int z = (63 - Long.numberOfLeadingZeros(v)) / 10;
+        return String.format("%.1f %sB", (double)v / (1L << (z*10)), " KMGTPE".charAt(z));
     }
 }
 
