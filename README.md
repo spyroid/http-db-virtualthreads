@@ -3,8 +3,8 @@
 ```http://localhost:8080/```  
 
 
-Dummy endpoint ```/dbroles``` returns DB roles from postgres if cli arguments are provided
+```/dbroles``` returns DB roles from postgres if cli arguments are provided
 
 ```run with [jdbcurl] [username] [password]```
 
-With support of GraalVM native compile
+With sa support of GraalVM native compile
