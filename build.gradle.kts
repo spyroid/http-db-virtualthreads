@@ -2,7 +2,7 @@ plugins {
     id("java")
 //    kotlin("jvm") version "1.8.20-RC"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("org.graalvm.buildtools.native") version "0.10.6"
+    id("org.graalvm.buildtools.native") version "0.11.0"
     id("com.github.ben-manes.versions") version "0.52.0"
 }
 
@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
 //    implementation("org.postgresql:postgresql:42.6.0")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.19.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.19.2")
 }
 
 

@@ -26,7 +26,7 @@ public class Main {
             try (var out = exchange.getResponseBody()) {
                 var str = ("Simplest HTTP with VirtualThreads\n\n" + Thread.currentThread());
                 var mem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-                str += "\n\nMemory: " + formatSize(mem);
+                str += "\n\nUsed Memory: " + formatSize(mem);
                 var asBytes = str.getBytes();
                 exchange.getResponseHeaders().add("Content-Type", "text/plain");
                 exchange.sendResponseHeaders(200, asBytes.length);
