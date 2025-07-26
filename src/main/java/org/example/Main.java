@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-
+        var start = System.currentTimeMillis();
         Jsonb jsonb = Jsonb.instance();
         JsonType<Response> responseType = jsonb.type(Response.class);
 
@@ -21,11 +21,9 @@ public class Main {
 
         server.createContext("/", exchange -> {
             try (var out = exchange.getResponseBody()) {
-                var mem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-                var response = new Response("Simplest HTTP with VirtualThreads", formatSize(mem));
+                var response = new Response("Simplest HTTP with VirtualThreads", getFreeMem());
+                exchange.getResponseHeaders().add("Content-Type", "application/json");
                 var bytes = responseType.toJsonBytes(response);
-
-                exchange.getResponseHeaders().add("Content-Type", "text/plain");
                 exchange.sendResponseHeaders(200, bytes.length);
                 out.write(bytes);
             } catch (Exception e) {
@@ -33,11 +31,18 @@ public class Main {
         });
 
         server.start();
-        System.out.println("Server started on " + listen);
+        var end = System.currentTimeMillis();
+        System.out.println("Server started on " + listen +  " (" + (end - start) + "ms)");
+        System.out.println(getFreeMem());
     }
 
     @Json
     record Response(String body, String usedMemory) {
+    }
+
+    public static String getFreeMem() {
+        var mem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        return formatSize(mem);
     }
 
     public static String formatSize(long v) {
