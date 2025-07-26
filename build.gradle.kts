@@ -20,8 +20,8 @@ repositories {
 }
 
 dependencies {
-//    implementation("org.postgresql:postgresql:42.6.0")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.19.2")
+    implementation("io.avaje:avaje-jsonb:3.6")
+    annotationProcessor("io.avaje:avaje-jsonb-generator:3.6")
 }
 
 
@@ -33,6 +33,7 @@ tasks {
     }
     shadowJar {
         archiveBaseName.set("shadow")
+        isZip64 = true
         mergeServiceFiles()
 //        minimize()
         dependencies {
