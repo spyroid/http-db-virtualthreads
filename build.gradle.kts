@@ -1,7 +1,7 @@
 plugins {
     id("java")
 //    kotlin("jvm") version "1.8.20-RC"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "9.0.2"
     id("org.graalvm.buildtools.native") version "0.11.0"
     id("com.github.ben-manes.versions") version "0.52.0"
 }
@@ -35,7 +35,7 @@ tasks {
         archiveBaseName.set("shadow")
         isZip64 = true
         mergeServiceFiles()
-//        minimize()
+        minimize()
         dependencies {
             exclude(dependency("org.jetbrains.kotlin:.*"))
             exclude(dependency("org.jetbrains:.*"))
