@@ -9,7 +9,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    static void main(String[] args) throws Exception {
         var start = System.currentTimeMillis();
         Jsonb jsonb = Jsonb.instance();
         JsonType<Response> responseType = jsonb.type(Response.class);
